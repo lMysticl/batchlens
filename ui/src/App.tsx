@@ -21,7 +21,7 @@ function Connected({
   const [selection, setSelection] = useState<string>();
   const job = jobs?.find((item) => item.name === selection) ?? jobs?.[0];
   return (
-    <Shell demo={info.demo} onDisconnect={disconnect}>
+    <Shell demo={info.demo} version={info.version} onDisconnect={disconnect}>
       {jobs && jobs.length > 1 && (
         <div className="job-list" aria-label="Registered jobs">
           {jobs.map((item) => (

@@ -10,13 +10,14 @@ git push origin v0.3.0
 ```
 
 The [release workflow](../.github/workflows/release.yml) checks that the tag matches
-the Maven version, runs the frontend and JVM checks, and publishes the demo JAR, both
-starter JARs and POMs, a source ZIP, `SHA256SUMS` and `VERIFICATION.json`.
+the Maven version, runs the frontend and JVM checks, and publishes the demo JAR, the
+core and both starter JARs with their POMs, a source ZIP, `SHA256SUMS` and
+`VERIFICATION.json`.
 
 ## Maven Central
 
 The `central` Maven profile adds sources, Javadoc and GPG signatures and uploads one
-bundle with the parent POM and both starters; the demo is excluded. Publishing is
+bundle with the parent POM, the core and both starters; the demo is excluded. Publishing is
 manual because a Central release cannot be deleted.
 
 One-time setup by the namespace owner:

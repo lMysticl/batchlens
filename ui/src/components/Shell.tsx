@@ -3,10 +3,12 @@ import { LogOut } from "lucide-react";
 import { Brand } from "./Brand";
 export function Shell({
   demo,
+  version,
   onDisconnect,
   children,
 }: {
   demo: boolean;
+  version: string;
   onDisconnect: () => void;
   children: ReactNode;
 }) {
@@ -52,7 +54,7 @@ export function Shell({
       <footer className="studio-footer">
         <span>KEEP BATCH MOVING FORWARD.</span>
         <a href="https://github.com/lMysticl/batchlens" target="_blank" rel="noreferrer">
-          OPEN SOURCE / v0.3.0 ↗
+          OPEN SOURCE / v{version} ↗
         </a>
       </footer>
     </div>

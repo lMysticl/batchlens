@@ -7,9 +7,10 @@ cases, not the sum of repeated matrix executions.
 
 | Gate | Evidence |
 |---|---|
-| Opt-in starter, 2 JVM tests | Disabled integration installs no endpoints; configured token is required |
+| Core rules, 11 JVM tests | Read-only switch, parameter limits, restart and stop preconditions, newest-first history and its limits, token length, build-stamped version; run against an in-memory adapter |
+| Opt-in starters, 1 JVM test each | Disabled integration installs no endpoints and needs no Batch infrastructure |
 | Actual HTTP + Batch, 7 JVM tests | Real failed chunk restart to 300 unique rows; cooperative stop/resume; concurrent restart conflict; input/error contracts; encoded/matrix path authentication; bounded executor overload; real business transaction rollback |
-| Spring Boot 3.5 starter, 6 JVM tests | Opt-in and token checks; real H2 job repository: 401 without token, failed run restarted as the same instance with only the unfinished step re-run, 409 on restart/stop of a completed run, 404/400 contracts |
+| Spring Boot 3.5 starter, 4 JVM tests | Real H2 job repository: 401 without token, failed run restarted as the same instance with only the unfinished step re-run, 409 on restart/stop of a completed run, 404/400 contracts |
 | React, 4 tests | String parameter validation; aborted stale requests; recoverable polling failure |
 | Production assets | TypeScript strict checking, Prettier, Vite build, embedded UI in the executable JAR |
 | Java quality | Compiler deprecation warnings treated as errors; Spotless formatting |

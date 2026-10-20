@@ -36,7 +36,7 @@ jobs:
       - name: Build and test the frontend
         working-directory: ui
         run: npm ci && npm run check && npm test && npm run build
-      - name: Build and test both starters and the demo
+      - name: Build and test the core, both starters and the demo
         run: ./mvnw -B verify
       - name: Collect assets with checksums and a verification record
         run: |
@@ -44,9 +44,11 @@ jobs:
           OUT=release-assets
           mkdir "$OUT"
           cp "batchlens-demo/target/batchlens-demo-$VERSION.jar" "$OUT/"
+          cp "batchlens-core/target/batchlens-core-$VERSION.jar" "$OUT/"
           cp "batchlens-spring-boot-starter/target/batchlens-spring-boot-starter-$VERSION.jar" "$OUT/"
           cp "batchlens-spring-boot3-starter/target/batchlens-spring-boot3-starter-$VERSION.jar" "$OUT/"
           cp pom.xml "$OUT/batchlens-$VERSION.pom"
+          cp batchlens-core/pom.xml "$OUT/batchlens-core-$VERSION.pom"
           cp batchlens-spring-boot-starter/pom.xml "$OUT/batchlens-spring-boot-starter-$VERSION.pom"
           cp batchlens-spring-boot3-starter/pom.xml "$OUT/batchlens-spring-boot3-starter-$VERSION.pom"
           git archive --format=zip --prefix="batchlens-$VERSION/" -o "$OUT/batchlens-$VERSION-source.zip" HEAD
@@ -92,6 +94,8 @@ jobs:
           |---|---|
           | Spring Boot 4.1 / Spring Batch 6.0 | batchlens-spring-boot-starter-$VERSION.jar |
           | Spring Boot 3.5 / Spring Batch 5.2 | batchlens-spring-boot3-starter-$VERSION.jar |
+
+          Both starters depend on **batchlens-core-$VERSION.jar**, which holds the console and the API.
 
           [Installation and usage](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/docs/usage.md) · [Security](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/SECURITY.md) · [Changelog](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md)
 

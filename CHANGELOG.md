@@ -5,6 +5,9 @@
 - Add `batchlens-spring-boot3-starter` for Spring Boot 3.5 / Spring Batch 5.2 with the same
   console, REST API and properties. Tested with a real H2 job repository: authentication,
   start, restart of the same instance from its checkpoint, conflicts and missing executions.
+- Both starters depend on the new `batchlens-core`, which holds the console, REST API and
+  command rules once; each starter keeps only its Spring Batch adapter.
+- The API and the console footer report the version stamped by the build.
 - Release assets are built and checksummed by a tag-driven workflow.
 - Documentation no longer contains launch drafts or process notes.
 

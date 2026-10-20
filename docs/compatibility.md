@@ -9,9 +9,10 @@
 | UI | React 19.3.1, TypeScript 5.9.3 |
 | Build | Maven Wrapper 3.9.11; Node 24.15+ / 24.x |
 | CI OS | Ubuntu and Windows, Java 21/25 |
-| Host integration | Opt-in Spring Boot starter and standalone demo |
+| Host integration | Opt-in Spring Boot starters on a shared core; standalone demo |
 
-The frontend build uses a pinned lockfile. The Maven BOM owns dependency versions.
+The frontend build uses a pinned lockfile. Each module imports the Spring Boot BOM of
+its line; `batchlens-core` compiles against the 3.5 BOM and takes Spring from the host.
 The Maven distribution checksum and GitHub Action commit SHAs are pinned.
 Spotless uses google-java-format 1.36.0: 1.37.0 changed the formatter Style API
 incompatibly with the current Spotless adapter.

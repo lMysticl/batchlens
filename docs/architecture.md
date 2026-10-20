@@ -5,25 +5,36 @@ flowchart LR
   UI[React workspace] -->|Bearer / REST| HTTP[BatchController]
   HTTP --> Catalog[BatchCatalog]
   HTTP --> Commands[BatchCommands]
-  Catalog --> Repository[JobRepository]
-  Commands --> Operator[Host JobOperator]
-  Commands -->|Cooperative stop signal| Repository
-  Operator --> Executor[Host bounded executor]
-  Executor --> Jobs[Registered Job beans]
-  Jobs --> Repository
+  Catalog --> Adapter[SpringBatchAdapter]
+  Commands --> Adapter
+  Adapter --> B6[Batch 6: JobRepository, host JobOperator]
+  Adapter --> B5[Batch 5: JobExplorer, host JobLauncher]
+  B6 --> Jobs[Registered Job beans]
+  B5 --> Jobs
 ```
 
-`batchlens-spring-boot-starter` packages opt-in auto-configuration, REST handlers
-and the production React assets. `batchlens-demo` consumes that starter as a
-normal Maven dependency and owns the invoice job, datasource, executor and fixtures.
-The starter contains no demo business logic.
+| Module | Owns |
+|---|---|
+| `batchlens-core` | The React assets, REST handlers, authentication, Problem Details and the command rules. Compiled against Spring Boot 3.5; the host application supplies Spring at runtime. |
+| `batchlens-spring-boot-starter` | Opt-in auto-configuration and the Spring Batch 6.0 adapter. |
+| `batchlens-spring-boot3-starter` | Opt-in auto-configuration and the Spring Batch 5.2 adapter. |
+| `batchlens-demo` | The invoice job, datasource, executor and fixtures. It uses the Boot 4 starter as a normal dependency. |
 
-`catalog` projects Spring Batch objects into immutable DTO records. All reads
-come from `JobRepository`, including step errors and checkpoint-related counts.
-Missing JDBC metadata is translated into a stable 404 at the adapter boundary.
+`SpringBatchAdapter` is the only seam between the core and Spring Batch. Its
+implementations are the calls whose types moved between Spring Batch 5 and 6:
+reading executions, projecting them into views, launching, restarting and saving a
+stop request. Their projection code reads alike but compiles against different
+packages, so each starter keeps its own copy. The starters contain no demo business
+logic.
 
-`operations` validates commands, enforces the read-only switch and delegates
-start/restart to `JobOperator`. Stop sets STOPPING through the public repository API;
+`catalog` lists jobs and history from immutable view records. All reads come from
+the job repository, including step errors and checkpoint-related counts. Missing
+JDBC metadata is translated into a stable 404 at the adapter boundary.
+
+`operations` validates commands, enforces the read-only switch and the restart and
+stop preconditions, then delegates to the adapter: Batch 6 starts and restarts through
+`JobOperator`; Batch 5 launches again with the same identifying parameters through
+`JobLauncher`. Stop sets STOPPING through the public repository API;
 the worker owns step completion and checkpoint writes. The [stop decision](decisions/0001-cooperative-stop.md)
 records the qualified Spring Batch 6.0.5 behavior. A fixed array of 32 locks bounds lock storage
 and serializes commands for the same execution. Spring Batch owns transaction

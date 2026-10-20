@@ -20,8 +20,9 @@ current chunk may finish before the repository reaches STOPPED.
 
 ## Host application
 
-v0.3.0 supports **Spring Boot 4.1.1 / Spring Batch 6.0.5**. Build and install
-from source; this release is hosted on GitHub and is not on Maven Central.
+v0.3.0 supports **Spring Boot 4.1.1 / Spring Batch 6.0.5** and **Spring Boot 3.5.16 /
+Spring Batch 5.2.6**. Build and install from source; this release is hosted on GitHub
+and is not on Maven Central.
 Requires JDK 21 or 25, Git and Node 24.15+ (24.x).
 
 ```sh
