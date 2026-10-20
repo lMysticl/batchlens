@@ -20,7 +20,20 @@ current chunk may finish before the repository reaches STOPPED.
 
 ## Host application
 
-Install the project locally as shown in the README, then add:
+v0.2.0 supports **Spring Boot 4.1.1 / Spring Batch 6.0.5**. Build and install
+from source; this release is hosted on GitHub and is not on Maven Central.
+Requires JDK 21 or 25, Git and Node 24.15+ (24.x).
+
+```sh
+git clone https://github.com/lMysticl/batchlens.git
+cd batchlens/ui
+npm ci
+npm run build
+cd ..
+./mvnw -B install
+```
+
+On Windows, use `mvnw.cmd`. Add the starter to your application:
 
 ```xml
 <dependency>
@@ -35,6 +48,14 @@ transaction manager and registered `Job` beans. Set `batchlens.enabled=true` and
 a token of at least 32 characters. The UI is available at `/batchlens/`; API
 calls use `/batchlens/api/`. Host security, servlet context paths and network
 policy still apply. The UI resolves its API relative to its own page.
+
+Start with read-only access:
+
+```properties
+batchlens.enabled=true
+batchlens.api-token=${BATCHLENS_API_TOKEN}
+batchlens.operations-enabled=false
+```
 
 Job control uses the host's `JobOperator`. Configure a bounded asynchronous
 executor before enabling `batchlens.operations-enabled=true`. For example:
@@ -65,15 +86,15 @@ configuration. BatchLens does not replace the host's executor or job policy.
 Every API request requires `Authorization: Bearer <token>`. Errors use HTTP
 Problem Details. IDs are strings in JSON; keep them as strings in clients.
 
-| Method | Relative to `/batchlens/api` | Result |
-|---|---|---|
-| GET | `/info` | Version, demo and operation configuration |
-| GET | `/jobs` | Registered and historical job names |
-| GET | `/executions?job=invoiceImport&limit=20` | Recent executions |
-| GET | `/executions/{id}` | Execution, parameters and steps |
-| POST | `/jobs/{name}/start` | Accepted execution; body `{"parameters":{"run":"example-1"}}` |
-| POST | `/executions/{id}/restart` | Accepted restart of FAILED/STOPPED execution |
-| POST | `/executions/{id}/stop` | Accepted cooperative stop |
+| Method | Relative to `/batchlens/api`             | Result                                                        |
+| ------ | ---------------------------------------- | ------------------------------------------------------------- |
+| GET    | `/info`                                  | Version, demo and operation configuration                     |
+| GET    | `/jobs`                                  | Registered and historical job names                           |
+| GET    | `/executions?job=invoiceImport&limit=20` | Recent executions                                             |
+| GET    | `/executions/{id}`                       | Execution, parameters and steps                               |
+| POST   | `/jobs/{name}/start`                     | Accepted execution; body `{"parameters":{"run":"example-1"}}` |
+| POST   | `/executions/{id}/restart`               | Accepted restart of FAILED/STOPPED execution                  |
+| POST   | `/executions/{id}/stop`                  | Accepted cooperative stop                                     |
 
 Parameters are identifying strings: at most 20, with names up to 64 characters
 and values up to 1,024 characters. Numeric, date and non-identifying parameter
