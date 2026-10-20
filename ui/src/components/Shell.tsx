@@ -52,7 +52,7 @@ export function Shell({
       <footer className="studio-footer">
         <span>KEEP BATCH MOVING FORWARD.</span>
         <a href="https://github.com/lMysticl/batchlens" target="_blank" rel="noreferrer">
-          OPEN SOURCE / v0.2.0 ↗
+          OPEN SOURCE / v0.3.0 ↗
         </a>
       </footer>
     </div>

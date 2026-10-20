@@ -20,7 +20,7 @@ current chunk may finish before the repository reaches STOPPED.
 
 ## Host application
 
-v0.2.0 supports **Spring Boot 4.1.1 / Spring Batch 6.0.5**. Build and install
+v0.3.0 supports **Spring Boot 4.1.1 / Spring Batch 6.0.5**. Build and install
 from source; this release is hosted on GitHub and is not on Maven Central.
 Requires JDK 21 or 25, Git and Node 24.15+ (24.x).
 
@@ -39,7 +39,7 @@ On Windows, use `mvnw.cmd`. Add the starter to your application:
 <dependency>
   <groupId>io.github.lmysticl</groupId>
   <artifactId>batchlens-spring-boot-starter</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -47,9 +47,7 @@ For a **Spring Boot 3.5 / Spring Batch 5.2** application, use
 `batchlens-spring-boot3-starter` instead (same version, same properties, UI and API).
 It reads history through the host's `JobExplorer` and starts or restarts jobs through
 its `JobLauncher`: a restart launches the FAILED or STOPPED instance again with its
-identifying parameters, so Spring Batch resumes from the saved checkpoints. This
-starter is built from the current source tree and is not part of the v0.2.0 release
-assets.
+identifying parameters, so Spring Batch resumes from the saved checkpoints.
 
 Use the tested Boot/Batch versions, a configured JDBC `JobRepository`, datasource,
 transaction manager and registered `Job` beans. Set `batchlens.enabled=true` and
@@ -116,7 +114,7 @@ does not allow the command. Refresh before deciding what to do next.
 
 ## Operating limits
 
-Use one application instance for command control in v0.2.0. The striped command
+Use one application instance for command control in v0.3.0. The striped command
 locks coordinate requests in this JVM; the Batch repository remains authoritative.
 The demo executor has two workers and four queued tasks. The host decides what
 to do when its executor is full. In the demo, excess submissions remain inspectable

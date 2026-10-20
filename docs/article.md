@@ -8,10 +8,10 @@ BatchLens is an opt-in Spring Boot starter with a bundled React interface. It re
 
 ## Try the failure before reading the architecture
 
-Download the demo from [the v0.2.0 release](https://github.com/lMysticl/batchlens/releases/tag/v0.2.0) and run it with Java 21 or 25:
+Download the demo from [the v0.3.0 release](https://github.com/lMysticl/batchlens/releases/tag/v0.3.0) and run it with Java 21 or 25:
 
 ```sh
-java -jar batchlens-demo-0.2.0.jar
+java -jar batchlens-demo-0.3.0.jar
 ```
 
 Open `http://localhost:8091/batchlens/`, choose the bundled local demo token, and connect. Start the invoice import with the suggested parameters. It processes a fixture of 300 invoices and deliberately fails on the first attempt at invoice 137. With chunks of 20, the failed attempt has 120 committed writes. Open its step details and full error, then restart that execution. The second attempt writes the remaining 180 records; the business table ends with 300 unique invoice IDs.

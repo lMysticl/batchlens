@@ -1,10 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-10-20
 
 - Add `batchlens-spring-boot3-starter` for Spring Boot 3.5 / Spring Batch 5.2 with the same
   console, REST API and properties. Tested with a real H2 job repository: authentication,
   start, restart of the same instance from its checkpoint, conflicts and missing executions.
+- Release assets are built and checksummed by a tag-driven workflow.
+- Documentation no longer contains launch drafts or process notes.
 
 ## 0.2.0 — 2026-10-20
 

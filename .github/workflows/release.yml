@@ -1,0 +1,102 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      MAVEN_OPTS: --enable-native-access=ALL-UNNAMED -Dfile.encoding=UTF-8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - name: Check that the tag matches the build version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ACTUAL="$(./mvnw -B -q help:evaluate -Dexpression=project.version -DforceStdout)"
+          if [ "$VERSION" != "$ACTUAL" ]; then echo "Tag $GITHUB_REF_NAME does not match version $ACTUAL"; exit 1; fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+      - name: Build and test the frontend
+        working-directory: ui
+        run: npm ci && npm run check && npm test && npm run build
+      - name: Build and test both starters and the demo
+        run: ./mvnw -B verify
+      - name: Collect assets with checksums and a verification record
+        run: |
+          set -euo pipefail
+          OUT=release-assets
+          mkdir "$OUT"
+          cp "batchlens-demo/target/batchlens-demo-$VERSION.jar" "$OUT/"
+          cp "batchlens-spring-boot-starter/target/batchlens-spring-boot-starter-$VERSION.jar" "$OUT/"
+          cp "batchlens-spring-boot3-starter/target/batchlens-spring-boot3-starter-$VERSION.jar" "$OUT/"
+          cp pom.xml "$OUT/batchlens-$VERSION.pom"
+          cp batchlens-spring-boot-starter/pom.xml "$OUT/batchlens-spring-boot-starter-$VERSION.pom"
+          cp batchlens-spring-boot3-starter/pom.xml "$OUT/batchlens-spring-boot3-starter-$VERSION.pom"
+          git archive --format=zip --prefix="batchlens-$VERSION/" -o "$OUT/batchlens-$VERSION-source.zip" HEAD
+          (cd "$OUT" && sha256sum -- * > SHA256SUMS)
+          python3 - "$OUT" <<'PY'
+          import hashlib, json, os, pathlib, platform, subprocess, sys
+          out = pathlib.Path(sys.argv[1])
+          java = next(l for l in subprocess.run(["java", "-version"], capture_output=True, text=True).stderr.splitlines() if " version " in l)
+          record = {
+              "repository": os.environ["GITHUB_REPOSITORY"],
+              "tag": os.environ["GITHUB_REF_NAME"],
+              "commit": os.environ["GITHUB_SHA"],
+              "workflowRun": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+              "builtWith": {"java": java, "os": platform.platform()},
+              "checks": ["npm run check", "npm test", "npm run build", "./mvnw -B verify"],
+              "assets": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                         for p in sorted(out.iterdir()) if p.name != "SHA256SUMS"},
+              "signed": False,
+          }
+          (out / "VERIFICATION.json").write_text(json.dumps(record, indent=2) + "\n")
+          PY
+          (cd "$OUT" && sha256sum VERIFICATION.json > VERIFICATION.json.sha256)
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<EOF
+          See why a Spring Batch job failed. Restart it from its last saved checkpoint.
+
+          ### Run the demo
+
+          Download **batchlens-demo-$VERSION.jar** below. Requires Java 21 or 25.
+
+          \`\`\`sh
+          java -jar batchlens-demo-$VERSION.jar
+          \`\`\`
+
+          Open http://localhost:8091/batchlens/, use the bundled demo-token shortcut, connect and start a run. The sample import fails once; restart it to finish all 300 invoices.
+
+          ### Use it in your application
+
+          | Your application | Starter |
+          |---|---|
+          | Spring Boot 4.1 / Spring Batch 6.0 | batchlens-spring-boot-starter-$VERSION.jar |
+          | Spring Boot 3.5 / Spring Batch 5.2 | batchlens-spring-boot3-starter-$VERSION.jar |
+
+          [Installation and usage](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/docs/usage.md) · [Security](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/SECURITY.md) · [Changelog](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/CHANGELOG.md)
+
+          ### Build and verification
+
+          Built and tested by [this workflow run]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID) from $GITHUB_SHA on Ubuntu with Java 21. \`SHA256SUMS\` covers the binaries and source; \`VERIFICATION.json\` records the commit, run and checksums. Assets are unsigned.
+          EOF
+          gh release create "$GITHUB_REF_NAME" release-assets/* --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md

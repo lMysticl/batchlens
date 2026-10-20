@@ -24,10 +24,10 @@ Runs inside your Spring Batch application. Spring Batch keeps ownership of job s
 
 ## Try the demo
 
-Requires **Java 21 or 25**. Download [batchlens-demo-0.2.0.jar](https://github.com/lMysticl/batchlens/releases/download/v0.2.0/batchlens-demo-0.2.0.jar), then run:
+Requires **Java 21 or 25**. Download [batchlens-demo-0.3.0.jar](https://github.com/lMysticl/batchlens/releases/download/v0.3.0/batchlens-demo-0.3.0.jar), then run:
 
 ```sh
-java -jar batchlens-demo-0.2.0.jar
+java -jar batchlens-demo-0.3.0.jar
 ```
 
 1. Open [localhost:8091/batchlens](http://localhost:8091/batchlens/).
@@ -43,11 +43,11 @@ Two starters share the same console and API:
 | Your application | Artifact |
 |---|---|
 | Spring Boot 4.1 / Spring Batch 6.0 | `batchlens-spring-boot-starter` |
-| Spring Boot 3.5 / Spring Batch 5.2 | `batchlens-spring-boot3-starter` (from source, after v0.2.0) |
+| Spring Boot 3.5 / Spring Batch 5.2 | `batchlens-spring-boot3-starter` |
 
 Follow the [installation guide](docs/usage.md#host-application) to build them locally and configure your application. The starters are not on Maven Central yet.
 
-Job controls are opt-in. v0.2.0 supports one application instance; see [operating limits](docs/usage.md#operating-limits) and [security](SECURITY.md) before deployment. The bundled demo token is public.
+Job controls are opt-in. v0.3.0 supports one application instance; see [operating limits](docs/usage.md#operating-limits) and [security](SECURITY.md) before deployment. The bundled demo token is public.
 
 ## For developers
 
