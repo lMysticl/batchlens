@@ -2,6 +2,8 @@
 
 **See why a Spring Batch job failed. Restart it from its last saved checkpoint.**
 
+Spring Cloud Data Flow [stopped being open source in 2025](https://spring.io/blog/2025/04/21/spring-cloud-data-flow-commercial). BatchLens is an open-source console for the part many teams used it for — seeing and restarting Spring Batch jobs — embedded in your own application.
+
 Java 21 / 25 · Spring Boot · React · TypeScript · Self-hosted · MIT
 
 [![Build and verify](https://github.com/lMysticl/batchlens/actions/workflows/ci.yml/badge.svg)](https://github.com/lMysticl/batchlens/actions/workflows/ci.yml)
@@ -42,6 +44,6 @@ Job controls are opt-in. v0.2.0 supports one application instance; see [operatin
 
 ## For developers
 
-[Build and test](CONTRIBUTING.md) · [Test coverage](docs/validation.md) · [Compatibility](docs/compatibility.md) · [Engineering brief](docs/project-brief.md) · [Design](docs/design.md) · [Technical article](docs/article.md)
+[Build and test](CONTRIBUTING.md) · [Test coverage](docs/validation.md) · [Compatibility](docs/compatibility.md) · [Design](docs/design.md) · [Technical article](docs/article.md)
 
-Built by [Pavel Putrenkov](https://github.com/lMysticl). [MIT license](LICENSE).
+Built by [Pavlo Putrenkov](https://github.com/lMysticl). [MIT license](LICENSE).

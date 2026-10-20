@@ -8,7 +8,7 @@ adapters. Java owns execution state; the React client renders API projections.
 From ui/: `npm ci`, `npm run check`, `npm test`, `npm run build`.
 From repository root after the UI build: `./mvnw -B verify` (`mvnw.cmd` on Windows).
 
-Inspect skipped tests; a skipped Kafka integration is not proof of compatibility.
+Inspect skipped tests; a skipped integration test is not proof of compatibility.
 Exercise actual built JARs for end-to-end UI checks. Never replace integration
 failures with mocked success. Keep secrets and local data outside Git.
 
