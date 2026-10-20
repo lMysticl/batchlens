@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 — 2026-10-20
+
+- Porcelain & Vermilion: a new editorial workspace with horizontal navigation, distinct product identity and locally bundled OFL-licensed Geist typography.
+- Connected execution routes, a numbered history ledger and a committed-work spread.
+- Responsive keyboard-accessible layouts, visible focus, a skip link and product favicons.
+- New repository covers, actual application captures and a documented design contract.
+- Existing API and recovery semantics are preserved; v0.1.0 remains available.
+
 ## 0.1.0 — 2026-10-20
 
 - Add an opt-in Spring Boot starter with an embedded React operations console.

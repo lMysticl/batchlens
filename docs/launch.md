@@ -18,3 +18,6 @@ Spring Batch discussions, Spring community showcases, Java tooling roundups, and
 Check each community's current posting rules before posting. No outreach has been
 sent by this repository setup. GitHub stars and downloads are outcomes to measure,
 not guarantees. Start with reproducible setup feedback and useful issue reports.
+
+
+For the source-backed publication order, exact destinations and tailored draft replies, use [the distribution packet](distribution.md). The longer technical article is [ready for review](article.md).

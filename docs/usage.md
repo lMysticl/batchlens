@@ -26,7 +26,7 @@ Install the project locally as shown in the README, then add:
 <dependency>
   <groupId>io.github.lmysticl</groupId>
   <artifactId>batchlens-spring-boot-starter</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -87,7 +87,7 @@ does not allow the command. Refresh before deciding what to do next.
 
 ## Operating limits
 
-Use one application instance for command control in v0.1.0. The striped command
+Use one application instance for command control in v0.2.0. The striped command
 locks coordinate requests in this JVM; the Batch repository remains authoritative.
 The demo executor has two workers and four queued tasks. The host decides what
 to do when its executor is full. In the demo, excess submissions remain inspectable

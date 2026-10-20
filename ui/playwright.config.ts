@@ -28,7 +28,7 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          "java -Xmx512m -jar ../batchlens-demo/target/batchlens-demo-0.1.0.jar --spring.datasource.url=jdbc:h2:mem:browser-contract",
+          "java -Xmx512m -jar ../batchlens-demo/target/batchlens-demo-0.2.0.jar --spring.datasource.url=jdbc:h2:mem:browser-contract",
         url: "http://127.0.0.1:8091/batchlens/",
         reuseExistingServer: false,
         timeout: 45000,

@@ -1,3 +1,4 @@
+import { verifyWorkspaceAppearance } from "./appearance";
 import { test, expect } from "@playwright/test";
 import { randomUUID } from "node:crypto";
 import { mkdir } from "node:fs/promises";
@@ -12,6 +13,7 @@ test("inspect failure, restart a checkpoint, and stop an asynchronous import", a
   await page.getByRole("button", { name: "Use the bundled local demo token" }).click();
   await page.getByRole("button", { name: "Connect workspace" }).click();
   await expect(page.getByRole("heading", { name: "Invoice import" })).toBeVisible();
+  await verifyWorkspaceAppearance(page);
   for (let index = 0; index < 2; index++) {
     const seeded = await page.request.post(
       new URL("api/jobs/invoiceImport/start", page.url()).href,
@@ -35,13 +37,13 @@ test("inspect failure, restart a checkpoint, and stop an asynchronous import", a
   await inspector.locator(".tabs button").nth(1).click();
   await expect(inspector.locator("pre")).toContainText("Planned demo failure");
   await inspector.locator(".tabs button").first().click();
-  const committed = Number(await page.locator("tbody tr.selected td").nth(3).innerText());
+  const committed = Number(await page.getByTestId("execution-written-count").innerText());
   expect(committed).toBeGreaterThan(0);
   expect(committed).toBeLessThan(300);
   await capture("workspace");
   await page.getByRole("button", { name: "Restart execution" }).click();
   await expect(inspector.locator(".status").first()).toHaveText(/COMPLETED/i);
-  await expect(page.locator("tbody tr.selected td").nth(3)).toHaveText(String(300 - committed));
+  await expect(page.getByTestId("execution-written-count")).toHaveText(String(300 - committed));
   await page.getByRole("button", { name: "Start new execution" }).click();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeHidden();
@@ -68,6 +70,7 @@ test("inspect failure, restart a checkpoint, and stop an asynchronous import", a
       ? path.join(directory, `batchlens-${name}-${testInfo.project.name}.png`)
       : testInfo.outputPath(`${name}.png`);
     await mkdir(path.dirname(file), { recursive: true });
+    await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: file, fullPage: true });
     await testInfo.attach(name, { path: file, contentType: "image/png" });
   }

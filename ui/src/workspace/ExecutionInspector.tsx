@@ -58,7 +58,7 @@ export function ExecutionInspector({
               <div className="loading">Waiting for the first step…</div>
             )}
             {execution.steps.map((step, index) => (
-              <div className="step-item" key={step.id}>
+              <div className="step-item" data-status={step.status} key={step.id}>
                 <span className="step-number">{index + 1}</span>
                 <div>
                   <p className="step-name">{label(step.name)}</p>
@@ -81,29 +81,42 @@ export function ExecutionInspector({
               </div>
             ))}
           </div>
-          {failure && (
-            <div className="failure-callout">
-              <h3>Execution needs attention</h3>
-              <p>
-                {summary?.slice(0, 250)}
-                {summary && summary.length > 250 ? "…" : ""}
-              </p>
-              <button className="text-button" onClick={() => setTab("error")}>
-                Read the full error →
-              </button>
-            </div>
-          )}
-          <div className="panel-body" style={{ paddingTop: 0 }}>
-            <dl className="detail-grid">
-              <div>
-                <dt>Records read in this execution</dt>
-                <dd className="numeric">{execution.readCount}</dd>
+          <div className="execution-report">
+            <dl className="work-counts">
+              <div className="principal-count">
+                <dt>Committed writes in this execution</dt>
+                <dd data-testid="execution-written-count">{execution.writeCount}</dd>
               </div>
               <div>
-                <dt>Records written in this execution</dt>
-                <dd className="numeric">{execution.writeCount}</dd>
+                <dt>Records read</dt>
+                <dd>{execution.readCount}</dd>
+              </div>
+              <div>
+                <dt>Step commits</dt>
+                <dd>{execution.steps.reduce((sum, step) => sum + step.commitCount, 0)}</dd>
+              </div>
+              <div>
+                <dt>Step rollbacks</dt>
+                <dd>{execution.steps.reduce((sum, step) => sum + step.rollbackCount, 0)}</dd>
               </div>
             </dl>
+            {failure ? (
+              <div className="failure-callout">
+                <p className="eyebrow">EXECUTION NEEDS ATTENTION</p>
+                <p>
+                  {summary?.slice(0, 250)}
+                  {summary && summary.length > 250 ? "…" : ""}
+                </p>
+                <button className="text-button" onClick={() => setTab("error")}>
+                  Read the full error →
+                </button>
+              </div>
+            ) : (
+              <p className="execution-note">
+                Counts follow committed repository state. A restart continues the same job instance
+                from its saved checkpoint.
+              </p>
+            )}
           </div>
         </>
       )}

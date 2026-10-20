@@ -13,66 +13,43 @@ export function ExecutionHistory({
   onSelect: (id: string) => void;
 }) {
   return (
-    <section className="panel" aria-labelledby="history-title">
-      <div className="panel-heading">
-        <div>
-          <h2 id="history-title">Execution history</h2>
-          <p className="panel-subtitle">Persisted by your Spring Batch repository</p>
-        </div>
-        <span className="section-caption">RECENT</span>
+    <section className="execution-ledger" aria-labelledby="history-title">
+      <div className="history-caption">
+        <h2 id="history-title">Execution history</h2>
+        <p>
+          Each run has its own record.
+          <br />
+          Choose one to inspect.
+        </p>
+        <span className="section-caption">{executions.length} RECENT · UP TO 20 INSTANCES</span>
       </div>
       {executions.length === 0 ? (
         <div className="empty-state">
-          <Inbox size={27} />
+          <Inbox size={24} />
           <h3>No executions yet</h3>
-          <p>Start a job to inspect its steps, parameters and committed work.</p>
+          <p>Start a job to inspect its steps and committed work.</p>
         </div>
       ) : (
-        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Execution</th>
-                <th>Status</th>
-                <th className="optional-column">Started</th>
-                <th>Written</th>
-                <th className="optional-column">Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              {executions.map((execution) => (
-                <tr
-                  key={execution.id}
-                  className={execution.id === selectedId ? "selected" : undefined}
-                >
-                  <td>
-                    <button
-                      className="row-link mono"
-                      onClick={() => onSelect(execution.id)}
-                      aria-label={`Inspect execution ${execution.id}`}
-                    >
-                      #{execution.id}
-                    </button>
-                  </td>
-                  <td>
-                    <Status value={execution.status} />
-                  </td>
-                  <td className="optional-column numeric">{timestamp(execution.startTime)}</td>
-                  <td className="numeric">{execution.writeCount.toLocaleString()}</td>
-                  <td className="optional-column numeric">{duration(execution.durationMillis)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ol className="execution-timeline">
+          {executions.map((execution) => (
+            <li key={execution.id}>
+              <button
+                aria-label={`Inspect execution ${execution.id}`}
+                aria-pressed={execution.id === selectedId}
+                onClick={() => onSelect(execution.id)}
+              >
+                <strong>#{execution.id}</strong>
+                <Status value={execution.status} />
+                <time>{timestamp(execution.startTime)}</time>
+                <span>
+                  {execution.writeCount.toLocaleString()} written ·{" "}
+                  {duration(execution.durationMillis)}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ol>
       )}
-      <div className="table-footer">
-        <span>
-          {executions.length} recent execution{executions.length === 1 ? "" : "s"} · up to 20
-          instances
-        </span>
-        <span>Live metadata</span>
-      </div>
     </section>
   );
 }

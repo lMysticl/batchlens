@@ -39,7 +39,7 @@ public final class BatchController {
   public BatchViews.Info info() {
     return new BatchViews.Info(
         "BatchLens",
-        "0.1.0",
+        "0.2.0",
         properties.operationsEnabled(),
         environment.getProperty("batchlens.demo", Boolean.class, false));
   }

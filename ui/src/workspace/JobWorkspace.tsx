@@ -101,15 +101,7 @@ export function JobWorkspace({ client, job, info }: { client: Client; job: Job; 
       {executions === undefined ? (
         <div className="panel loading">Loading execution metadata…</div>
       ) : (
-        <div className="split-workspace">
-          <ExecutionHistory
-            executions={executions}
-            selectedId={effectiveId}
-            onSelect={(id) => {
-              setSelectedId(id);
-              setNotice("");
-            }}
-          />
+        <div className="execution-score">
           {effectiveId ? (
             <ExecutionDetail
               key={effectiveId}
@@ -126,6 +118,14 @@ export function JobWorkspace({ client, job, info }: { client: Client; job: Job; 
               <p>Choose an execution to inspect its steps and parameters.</p>
             </section>
           )}
+          <ExecutionHistory
+            executions={executions}
+            selectedId={effectiveId}
+            onSelect={(id) => {
+              setSelectedId(id);
+              setNotice("");
+            }}
+          />
         </div>
       )}
       {startOpen && (
