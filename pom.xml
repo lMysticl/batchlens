@@ -38,6 +38,7 @@
   </properties>
   <modules>
     <module>batchlens-spring-boot-starter</module>
+    <module>batchlens-spring-boot3-starter</module>
     <module>batchlens-demo</module>
   </modules>
   <build>

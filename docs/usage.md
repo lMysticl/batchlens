@@ -43,6 +43,14 @@ On Windows, use `mvnw.cmd`. Add the starter to your application:
 </dependency>
 ```
 
+For a **Spring Boot 3.5 / Spring Batch 5.2** application, use
+`batchlens-spring-boot3-starter` instead (same version, same properties, UI and API).
+It reads history through the host's `JobExplorer` and starts or restarts jobs through
+its `JobLauncher`: a restart launches the FAILED or STOPPED instance again with its
+identifying parameters, so Spring Batch resumes from the saved checkpoints. This
+starter is built from the current source tree and is not part of the v0.2.0 release
+assets.
+
 Use the tested Boot/Batch versions, a configured JDBC `JobRepository`, datasource,
 transaction manager and registered `Job` beans. Set `batchlens.enabled=true` and
 a token of at least 32 characters. The UI is available at `/batchlens/`; API

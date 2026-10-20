@@ -38,7 +38,14 @@ The demo imports 300 sample invoices. It fails once at invoice 137, then resumes
 
 ## Use it in your application
 
-The starter supports **Spring Boot 4.1.1 / Spring Batch 6.0.5**. Follow the [installation guide](docs/usage.md#host-application) to build it locally and configure your application. GitHub hosts this release; the starter is not on Maven Central.
+Two starters share the same console and API:
+
+| Your application | Artifact |
+|---|---|
+| Spring Boot 4.1 / Spring Batch 6.0 | `batchlens-spring-boot-starter` |
+| Spring Boot 3.5 / Spring Batch 5.2 | `batchlens-spring-boot3-starter` (from source, after v0.2.0) |
+
+Follow the [installation guide](docs/usage.md#host-application) to build them locally and configure your application. The starters are not on Maven Central yet.
 
 Job controls are opt-in. v0.2.0 supports one application instance; see [operating limits](docs/usage.md#operating-limits) and [security](SECURITY.md) before deployment. The bundled demo token is public.
 

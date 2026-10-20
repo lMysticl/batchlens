@@ -3,8 +3,8 @@
 | Component | Supported and tested scope |
 |---|---|
 | Runtime | Java 21 and 25; Java 21 bytecode |
-| Spring Boot | 4.1.1 |
-| Spring Batch | 6.0.5 from the Boot BOM |
+| Spring Boot | 4.1.1 (`batchlens-spring-boot-starter`); 3.5.16 (`batchlens-spring-boot3-starter`) |
+| Spring Batch | 6.0.5 and 5.2.6 from the respective Boot BOMs |
 | Metadata database | H2 2.4.240 in this release |
 | UI | React 19.3.1, TypeScript 5.9.3 |
 | Build | Maven Wrapper 3.9.11; Node 24.15+ / 24.x |

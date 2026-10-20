@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add `batchlens-spring-boot3-starter` for Spring Boot 3.5 / Spring Batch 5.2 with the same
+  console, REST API and properties. Tested with a real H2 job repository: authentication,
+  start, restart of the same instance from its checkpoint, conflicts and missing executions.
+
 ## 0.2.0 — 2026-10-20
 
 - Porcelain & Vermilion: a new editorial workspace with horizontal navigation, distinct product identity and locally bundled OFL-licensed Geist typography.
